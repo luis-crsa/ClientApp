@@ -8,21 +8,23 @@ public class Main {
 
             Connection con = Database.getInstance().getConnection();
             Statement statement = con.createStatement();
-            
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            statement.executeUpdate("drop table if exists person");
-            statement.executeUpdate("create table person (id integer, name string)");
-            statement.executeUpdate("insert into person values(1, 'leo')");
-            statement.executeUpdate("insert into person values(2, 'yui')");
-            ResultSet rs = statement.executeQuery("select * from person");
+            String sql = FileUtils.loadTextFile("src/main/resources/schema.sql");
+            statement.executeUpdate(sql);
+
+            // Insert de teste
+            String insertSql = "INSERT INTO client (name, email, phone, cpf, birth_date, monthly_income, registration_date, active) " +
+                    "VALUES ('Maria Silva', 'maria@example.com', '99999-9999', '12345678900', '2600-05-15', 3500.00, '2025-07-18', 1)";
+            statement.executeUpdate(insertSql);
+            
+            ResultSet rs = statement.executeQuery("select * from client");
             while(rs.next())
             {
                 System.out.println("name = " + rs.getString("name"));
                 System.out.println("id = " + rs.getInt("id"));
             }
         }
-        catch(SQLException e)
+        catch(Exception e)
         {
             e.printStackTrace(System.err);
         }
