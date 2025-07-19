@@ -24,9 +24,40 @@ public class InputHelper {
         return input;
     }
 
-    public String readOptionalString(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
+    public String readEmail(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isBlank()) return null;
+
+            if (isValidEmail(input)) {
+                return input;
+            } else {
+                System.out.println("E-mail inválido. Ex: nome@dominio.com");
+            }
+        }
+    }
+
+    public String readPhone(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (isValidPhone(input)) return input;
+            System.out.println("Telefone inválido. Digite DDD seguido do número (10 ou 11 dígitos). Ex: 11987654321");
+        }
+    }
+
+    public String readValidCpf(String prompt) {
+        while (true) {
+            String cpf = readRequiredString(prompt).replaceAll("\\D", "");
+
+            if (isValidCpf(cpf)) {
+                return cpf;
+            }
+
+            System.out.println("CPF inválido. Certifique-se de digitar 11 números válidos.");
+        }
     }
 
     public LocalDate readBirthDate(String prompt) {
@@ -71,18 +102,6 @@ public class InputHelper {
         }
     }
 
-    public String readValidCpf(String prompt) {
-        while (true) {
-            String cpf = readRequiredString(prompt).replaceAll("\\D", "");
-
-            if (isValidCpf(cpf)) {
-                return cpf;
-            }
-
-            System.out.println("CPF inválido. Certifique-se de digitar 11 números válidos.");
-        }
-    }
-
     private boolean isValidCpf(String cpf) {
         if (cpf == null || cpf.length() != 11 || cpf.chars().distinct().count() == 1) {
             return false;
@@ -109,17 +128,16 @@ public class InputHelper {
             return false;
         }
     }
-    
-    public String readPhone(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
-            if (isValidPhone(input)) return input;
-            System.out.println("Telefone inválido. Digite DDD seguido do número (10 ou 11 dígitos). Ex: 11987654321");
-        }
-    }
 
     private boolean isValidPhone(String phone) {
         return phone.replaceAll("[\\s()-]", "").matches("^\\d{10,11}$");
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null &&
+                email.contains("@") &&
+                email.indexOf('@') > 0 &&
+                email.indexOf('@') < email.length() - 1 &&
+                email.substring(email.indexOf('@')).contains(".");
     }
 }

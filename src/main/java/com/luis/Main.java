@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Main {
@@ -65,7 +64,7 @@ public class Main {
         Client client = new Client();
 
         client.setName(input.readRequiredString("Nome: "));
-        client.setEmail(input.readOptionalString("Email (opcional): "));
+        client.setEmail(input.readEmail("Email (opcional): "));
         client.setPhone(input.readPhone("Telefone (opcional): "));
         client.setCpf(input.readValidCpf("CPF: "));
         client.setBirthDate(input.readBirthDate("Data de nascimento (yyyy-MM-dd): "));
@@ -116,7 +115,7 @@ public class Main {
         System.out.println("Atualize os dados.");
 
         client.setName(input.readRequiredString("Nome atual (" + client.getName() + ")\n"));
-        client.setEmail(input.readOptionalString("Email atual (" + client.getEmail() + ")\n"));
+        client.setEmail(input.readEmail("Email atual (" + client.getEmail() + ")\n"));
         client.setPhone(input.readPhone("Telefone atual (" + client.getPhone() + ")\n"));
         client.setCpf(input.readValidCpf("CPF atual (" + client.getCpf() + ")\n"));
         client.setBirthDate(input.readBirthDate("Data de nascimento atual (" + client.getBirthDate() + ") [yyyy-MM-dd]: \n"));
