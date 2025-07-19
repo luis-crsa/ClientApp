@@ -12,12 +12,11 @@ public class Client {
     private LocalDate birthDate;
     private Double monthlyIncome;
     private LocalDate registrationDate;
-    private boolean active;
 
     public Client() {
     }
 
-    public Client(Integer id, String name, String email, String phone, String cpf, LocalDate birthDate, Double monthlyIncome, LocalDate registrationDate, boolean active) {
+    public Client(Integer id, String name, String email, String phone, String cpf, LocalDate birthDate, Double monthlyIncome, LocalDate registrationDate) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -26,7 +25,6 @@ public class Client {
         this.birthDate = birthDate;
         this.monthlyIncome = monthlyIncome;
         this.registrationDate = registrationDate;
-        this.active = active;
     }
 
     public Integer getId() {
@@ -91,13 +89,5 @@ public class Client {
 
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

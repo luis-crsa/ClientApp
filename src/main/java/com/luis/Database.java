@@ -12,7 +12,7 @@ public class Database {
 
     public Database() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
         } catch (SQLException e) {
             System.err.println("Houve um problema ao criar o arquivo do banco!");
         }

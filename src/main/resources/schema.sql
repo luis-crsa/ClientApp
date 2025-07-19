@@ -6,6 +6,5 @@ CREATE TABLE IF NOT EXISTS client (
     cpf TEXT NOT NULL,
     birth_date DATE NOT NULL,
     monthly_income NUMERIC,
-    registration_date DATE NOT NULL,
-    active BOOLEAN NOT NULL
+    registration_date DATE NOT NULL
 );

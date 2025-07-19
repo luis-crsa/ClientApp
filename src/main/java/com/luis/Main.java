@@ -1,6 +1,7 @@
 package com.luis;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,9 +14,21 @@ public class Main {
             statement.executeUpdate(sql);
 
             // Insert de teste
-            String insertSql = "INSERT INTO client (name, email, phone, cpf, birth_date, monthly_income, registration_date, active) " +
-                    "VALUES ('Maria Silva', 'maria@example.com', '99999-9999', '12345678900', '2600-05-15', 3500.00, '2025-07-18', 1)";
-            statement.executeUpdate(insertSql);
+            ClientDAO dao = new ClientDAO();
+            Client client = new Client(
+                    null,
+                    "Maria Silva",
+                    "maria@example.com",
+                    "99999-9999",
+                    "12345678900",
+                    LocalDate.parse("1995-05-15"),
+                    3500.0,
+                    LocalDate.now()
+            );
+            dao.insert(client);
+            
+            // Delete de teste
+            dao.delete(1);
             
             ResultSet rs = statement.executeQuery("select * from client");
             while(rs.next())

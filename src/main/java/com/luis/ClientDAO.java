@@ -3,6 +3,7 @@ package com.luis;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ClientDAO {
     
@@ -13,8 +14,8 @@ public class ClientDAO {
     }
 
     public void insert(Client client) throws SQLException {
-        String sql = "INSERT INTO client (name, email, phone, cpf, birth_date, monthly_income, registration_date, active) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO client (name, email, phone, cpf, birth_date, monthly_income, registration_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, client.getName());
@@ -30,9 +31,16 @@ public class ClientDAO {
             }
 
             stmt.setDate(7, java.sql.Date.valueOf(client.getRegistrationDate()));
-            stmt.setBoolean(8, client.isActive());
 
             stmt.executeUpdate();
+        }
+    }
+
+    public void delete(Integer id) throws SQLException {
+        String sql = "DELETE FROM client WHERE id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
         }
     }
 }
