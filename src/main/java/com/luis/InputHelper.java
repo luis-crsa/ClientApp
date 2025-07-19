@@ -43,6 +43,7 @@ public class InputHelper {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+            if (input.isBlank()) return null;
             if (isValidPhone(input)) return input;
             System.out.println("Telefone inválido. Digite DDD seguido do número (10 ou 11 dígitos). Ex: 11987654321");
         }
