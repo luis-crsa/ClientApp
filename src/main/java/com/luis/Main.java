@@ -64,12 +64,12 @@ public class Main {
         InputHelper input = new InputHelper(scanner);
         Client client = new Client();
 
-        client.setName(input.readRequiredString("Nome: ").trim());
-        client.setEmail(input.readOptionalString("Email (opcional): ").trim());
-        client.setPhone(input.readOptionalString("Telefone (opcional): ").trim());
-        client.setCpf(input.readRequiredString("CPF: ").trim());
-        client.setBirthDate(input.readRequiredDate("Data de nascimento (yyyy-MM-dd): "));
-        client.setMonthlyIncome(input.readOptionalPositiveDouble("Renda mensal (opcional): "));
+        client.setName(input.readRequiredString("Nome: "));
+        client.setEmail(input.readOptionalString("Email (opcional): "));
+        client.setPhone(input.readOptionalString("Telefone (opcional): "));
+        client.setCpf(input.readValidCpf("CPF: "));
+        client.setBirthDate(input.readBirthDate("Data de nascimento (yyyy-MM-dd): "));
+        client.setMonthlyIncome(input.readMonthlyIncome("Renda mensal (opcional): "));
         client.setRegistrationDate(LocalDate.now());
 
         dao.insert(client);
@@ -103,6 +103,8 @@ public class Main {
     }
 
     private static void updateClient(Scanner scanner, ClientDAO dao) throws SQLException {
+        InputHelper input = new InputHelper(scanner);
+        
         System.out.print("Digite o ID do cliente a ser atualizado: ");
         int id = Integer.parseInt(scanner.nextLine());
         Client client = dao.findById(id);
@@ -134,9 +136,7 @@ public class Main {
             client.setPhone(phone.trim());
         }
 
-        System.out.print("CPF atual (" + client.getCpf() + "): ");
-        String cpf = scanner.nextLine();
-        if (!cpf.isBlank()) client.setCpf(cpf);
+        client.setCpf(input.readOptionalValidCpf(client.getCpf()));
 
         while (true) {
             System.out.print("Data de nascimento atual (" + client.getBirthDate() + ") [yyyy-MM-dd]: ");

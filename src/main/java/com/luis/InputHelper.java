@@ -29,7 +29,7 @@ public class InputHelper {
         return scanner.nextLine().trim();
     }
 
-    public LocalDate readRequiredDate(String prompt) {
+    public LocalDate readBirthDate(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
@@ -51,7 +51,7 @@ public class InputHelper {
         }
     }
 
-    public Double readOptionalPositiveDouble(String prompt) {
+    public Double readMonthlyIncome(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
@@ -68,6 +68,63 @@ public class InputHelper {
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido.");
             }
+        }
+    }
+
+    public String readValidCpf(String prompt) {
+        while (true) {
+            String cpf = readRequiredString(prompt).replaceAll("\\D", "");
+
+            if (isValidCpf(cpf)) {
+                return cpf;
+            }
+
+            System.out.println("CPF inválido. Certifique-se de digitar 11 números válidos.");
+        }
+    }
+
+    public String readOptionalValidCpf(String currentValue) {
+        while (true) {
+            System.out.print("CPF (atual: " + currentValue + "): ");
+            String input = scanner.nextLine().trim();
+
+            if (input.isBlank()) {
+                return currentValue;
+            }
+
+            String cpf = input.replaceAll("\\D", "");
+            if (isValidCpf(cpf)) {
+                return cpf;
+            }
+
+            System.out.println("CPF inválido. Certifique-se de digitar 11 números válidos.");
+        }
+    }
+
+    private boolean isValidCpf(String cpf) {
+        if (cpf == null || cpf.length() != 11 || cpf.chars().distinct().count() == 1) {
+            return false;
+        }
+
+        try {
+            int sum1 = 0, sum2 = 0;
+            for (int i = 0; i < 9; i++) {
+                int digit = Character.getNumericValue(cpf.charAt(i));
+                sum1 += digit * (10 - i);
+                sum2 += digit * (11 - i);
+            }
+
+            int firstCheckDigit = (sum1 * 10) % 11;
+            if (firstCheckDigit == 10) firstCheckDigit = 0;
+
+            sum2 += firstCheckDigit * 2;
+            int secondCheckDigit = (sum2 * 10) % 11;
+            if (secondCheckDigit == 10) secondCheckDigit = 0;
+
+            return firstCheckDigit == Character.getNumericValue(cpf.charAt(9)) &&
+                    secondCheckDigit == Character.getNumericValue(cpf.charAt(10));
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }
