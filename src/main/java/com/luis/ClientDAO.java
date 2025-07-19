@@ -63,7 +63,6 @@ public class ClientDAO {
         return clients;
     }
 
-
     public Client findById(Integer id) throws SQLException {
         String query = """
         SELECT id, name, email, phone, cpf, birth_date, monthly_income, registration_date 
@@ -90,6 +89,33 @@ public class ClientDAO {
         }
 
         return null;
+    }
+
+    public void update(Client client) throws SQLException {
+        String sql = """
+        UPDATE client SET 
+            name = ?, email = ?, phone = ?, cpf = ?, birth_date = ?, monthly_income = ?, registration_date = ?
+        WHERE id = ?
+        """;
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, client.getName());
+            stmt.setString(2, client.getEmail());
+            stmt.setString(3, client.getPhone());
+            stmt.setString(4, client.getCpf());
+            stmt.setDate(5, Date.valueOf(client.getBirthDate()));
+
+            if (client.getMonthlyIncome() != null) {
+                stmt.setDouble(6, client.getMonthlyIncome());
+            } else {
+                stmt.setNull(6, java.sql.Types.DOUBLE);
+            }
+
+            stmt.setDate(7, Date.valueOf(client.getRegistrationDate()));
+            stmt.setInt(8, client.getId());
+
+            stmt.executeUpdate();
+        }
     }
 
     public void delete(Integer id) throws SQLException {
