@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Main {
@@ -58,34 +59,23 @@ public class Main {
         System.out.println("5. Excluir cliente");
         System.out.println("0. Sair");
     }
-    
+
     private static void createClient(Scanner scanner, ClientDAO dao) throws SQLException {
+        InputHelper input = new InputHelper(scanner);
         Client client = new Client();
 
-        System.out.print("Nome: ");
-        client.setName(scanner.nextLine());
-
-        System.out.print("Email: ");
-        client.setEmail(scanner.nextLine());
-
-        System.out.print("Telefone: ");
-        client.setPhone(scanner.nextLine());
-
-        System.out.print("CPF: ");
-        client.setCpf(scanner.nextLine());
-
-        System.out.print("Data de nascimento (yyyy-MM-dd): ");
-        client.setBirthDate(LocalDate.parse(scanner.nextLine()));
-
-        System.out.print("Renda mensal: ");
-        String income = scanner.nextLine();
-        client.setMonthlyIncome(income.isBlank() ? null : Double.parseDouble(income));
-
+        client.setName(input.readRequiredString("Nome: ").trim());
+        client.setEmail(input.readOptionalString("Email (opcional): ").trim());
+        client.setPhone(input.readOptionalString("Telefone (opcional): ").trim());
+        client.setCpf(input.readRequiredString("CPF: ").trim());
+        client.setBirthDate(input.readRequiredDate("Data de nascimento (yyyy-MM-dd): "));
+        client.setMonthlyIncome(input.readOptionalPositiveDouble("Renda mensal (opcional): "));
         client.setRegistrationDate(LocalDate.now());
 
         dao.insert(client);
         System.out.println("Cliente cadastrado com sucesso!");
     }
+
 
     private static void listClients(ClientDAO dao) throws SQLException {
         var clients = dao.findAll();
@@ -124,29 +114,59 @@ public class Main {
 
         System.out.println("Atualize os dados. Deixe em branco para manter.");
 
-        System.out.print("Nome atual (" + client.getName() + "): ");
+        System.out.print("Nome atual (" + client.getName() + ")");
         String name = scanner.nextLine();
         if (!name.isBlank()) client.setName(name);
 
-        System.out.print("Email atual (" + client.getEmail() + "): ");
+        System.out.print("Email atual (" + client.getEmail() + "), '-' para limpar: ");
         String email = scanner.nextLine();
-        if (!email.isBlank()) client.setEmail(email);
+        if (email.equals("-")) {
+            client.setEmail(null);
+        } else if (!email.isBlank()) {
+            client.setEmail(email.trim());
+        }
 
-        System.out.print("Telefone atual (" + client.getPhone() + "): ");
+        System.out.print("Telefone atual (" + client.getPhone() + "), '-' para limpar: ");
         String phone = scanner.nextLine();
-        if (!phone.isBlank()) client.setPhone(phone);
+        if (phone.equals("-")) {
+            client.setPhone(null);
+        } else if (!phone.isBlank()) {
+            client.setPhone(phone.trim());
+        }
 
         System.out.print("CPF atual (" + client.getCpf() + "): ");
         String cpf = scanner.nextLine();
         if (!cpf.isBlank()) client.setCpf(cpf);
 
-        System.out.print("Data de nascimento atual (" + client.getBirthDate() + ") [yyyy-MM-dd]: ");
-        String birth = scanner.nextLine();
-        if (!birth.isBlank()) client.setBirthDate(LocalDate.parse(birth));
+        while (true) {
+            System.out.print("Data de nascimento atual (" + client.getBirthDate() + ") [yyyy-MM-dd]: ");
+            String birth = scanner.nextLine();
+            if (birth.isBlank()) break;
+            try {
+                LocalDate date = LocalDate.parse(birth);
+                client.setBirthDate(date);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida. Use o formato yyyy-MM-dd.");
+            }
+        }
 
-        System.out.print("Renda mensal atual (" + client.getMonthlyIncome() + "): ");
+        System.out.print("Renda mensal atual (" + client.getMonthlyIncome() + "), '-' para limpar: ");
         String income = scanner.nextLine();
-        if (!income.isBlank()) client.setMonthlyIncome(Double.parseDouble(income));
+        if (income.equals("-")) {
+            client.setMonthlyIncome(null);
+        } else if (!income.isBlank()) {
+            try {
+                double value = Double.parseDouble(income);
+                if (value < 0) {
+                    System.out.println("A renda deve ser maior ou igual a 0. Valor ignorado.");
+                } else {
+                    client.setMonthlyIncome(value);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido para renda. Valor ignorado.");
+            }
+        }
 
         dao.update(client);
         System.out.println("Cliente atualizado com sucesso!");
