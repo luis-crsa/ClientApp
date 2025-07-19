@@ -83,24 +83,6 @@ public class InputHelper {
         }
     }
 
-    public String readOptionalValidCpf(String currentValue) {
-        while (true) {
-            System.out.print("CPF (atual: " + currentValue + "): ");
-            String input = scanner.nextLine().trim();
-
-            if (input.isBlank()) {
-                return currentValue;
-            }
-
-            String cpf = input.replaceAll("\\D", "");
-            if (isValidCpf(cpf)) {
-                return cpf;
-            }
-
-            System.out.println("CPF inválido. Certifique-se de digitar 11 números válidos.");
-        }
-    }
-
     private boolean isValidCpf(String cpf) {
         if (cpf == null || cpf.length() != 11 || cpf.chars().distinct().count() == 1) {
             return false;
