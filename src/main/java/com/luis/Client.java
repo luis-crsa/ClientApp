@@ -90,4 +90,17 @@ public class Client {
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    public void printDetails() {
+        System.out.println("─────────────────────────────────────────────");
+        System.out.println("ID: " + id);
+        System.out.println("Nome: " + name);
+        System.out.println("E-mail: " + email);
+        System.out.println("Telefone: " + phone);
+        System.out.println("CPF: " + cpf);
+        System.out.println("Data de Nascimento: " + birthDate);
+        System.out.println("Renda Mensal: R$ " + String.format("%.2f", monthlyIncome));
+        System.out.println("Data de Cadastro: " + registrationDate);
+        System.out.println("─────────────────────────────────────────────\n");
+    }
 }
