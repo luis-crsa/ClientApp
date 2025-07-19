@@ -1,21 +1,12 @@
 package com.luis;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileUtils {
 
-    public static String loadTextFile(final String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        StringBuilder sb = new StringBuilder();
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-
-        reader.close();
-        return sb.toString();
+    public static String loadTextFile(String filename) throws IOException {
+        return Files.readString(Path.of(filename));
     }
 }
