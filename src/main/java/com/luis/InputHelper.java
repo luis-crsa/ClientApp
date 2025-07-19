@@ -109,4 +109,17 @@ public class InputHelper {
             return false;
         }
     }
+    
+    public String readPhone(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            if (isValidPhone(input)) return input;
+            System.out.println("Telefone inválido. Digite DDD seguido do número (10 ou 11 dígitos). Ex: 11987654321");
+        }
+    }
+
+    private boolean isValidPhone(String phone) {
+        return phone.replaceAll("[\\s()-]", "").matches("^\\d{10,11}$");
+    }
 }

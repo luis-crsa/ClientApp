@@ -66,7 +66,7 @@ public class Main {
 
         client.setName(input.readRequiredString("Nome: "));
         client.setEmail(input.readOptionalString("Email (opcional): "));
-        client.setPhone(input.readOptionalString("Telefone (opcional): "));
+        client.setPhone(input.readPhone("Telefone (opcional): "));
         client.setCpf(input.readValidCpf("CPF: "));
         client.setBirthDate(input.readBirthDate("Data de nascimento (yyyy-MM-dd): "));
         client.setMonthlyIncome(input.readMonthlyIncome("Renda mensal (opcional): "));
@@ -75,7 +75,6 @@ public class Main {
         dao.insert(client);
         System.out.println("Cliente cadastrado com sucesso!");
     }
-
 
     private static void listClients(ClientDAO dao) throws SQLException {
         var clients = dao.findAll();
@@ -118,7 +117,7 @@ public class Main {
 
         client.setName(input.readRequiredString("Nome atual (" + client.getName() + ")\n"));
         client.setEmail(input.readOptionalString("Email atual (" + client.getEmail() + ")\n"));
-        client.setPhone(input.readOptionalString("Telefone atual (" + client.getPhone() + ")\n"));
+        client.setPhone(input.readPhone("Telefone atual (" + client.getPhone() + ")\n"));
         client.setCpf(input.readValidCpf("CPF atual (" + client.getCpf() + ")\n"));
         client.setBirthDate(input.readBirthDate("Data de nascimento atual (" + client.getBirthDate() + ") [yyyy-MM-dd]: \n"));
         client.setMonthlyIncome(input.readMonthlyIncome("Renda mensal atual (" + client.getMonthlyIncome() + ")\n"));
