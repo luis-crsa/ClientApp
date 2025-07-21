@@ -78,5 +78,18 @@ Se o cliente existir, a aplicação confirmará a exclusão. Caso contrário, se
 Escolha a opção 0.
 Encerra a aplicação.
 
+## ✅ Testes
+Este projeto possui testes unitários para as operações de CRUD da entidade Client. Os testes são executados em um banco de dados SQLite em memória.
+Para rodar os testes:
+```bash
+vmn test
+```
+Os testes cobrem:
+- Inserção de clientes
+- Busca por ID
+- Listagem de todos os clientes
+- Atualização de dados
+- Exclusão de registros
+
 # 👨‍💻Autor
 Luís Cláudio Rodrigues Sarmento
