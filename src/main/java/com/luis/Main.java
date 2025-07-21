@@ -1,6 +1,7 @@
 package com.luis;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -9,13 +10,13 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Connection con = Database.getInstance().getConnection();
+        Connection con = DriverManager.getConnection("jdbc:sqlite:database.db");
         Statement statement = con.createStatement();
 
         String sql = FileUtils.loadTextFile("src/main/resources/schema.sql");
         statement.executeUpdate(sql);
         
-        ClientDAO clientDAO = new ClientDAO();
+        ClientDAO clientDAO = new ClientDAO(con);
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 

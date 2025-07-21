@@ -7,17 +7,17 @@ import java.util.List;
 
 public class ClientDAO {
     
-    private Connection con;
+    private Connection connection;
 
-    public ClientDAO() {
-        con = Database.getInstance().getConnection();
+    public ClientDAO(Connection connection) {
+        this.connection = connection;
     }
 
     public void insert(Client client) throws SQLException {
         String sql = "INSERT INTO client (name, email, phone, cpf, birth_date, monthly_income, registration_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, client.getName());
             stmt.setString(2, client.getEmail());
             stmt.setString(3, client.getPhone());
@@ -49,7 +49,7 @@ public class ClientDAO {
         FROM client
         """;
 
-        try (Statement stmt = con.createStatement();
+        try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
@@ -75,7 +75,7 @@ public class ClientDAO {
         FROM client WHERE id = ?
         """;
 
-        try (PreparedStatement stmt = con.prepareStatement(query)) {
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -104,7 +104,7 @@ public class ClientDAO {
         WHERE id = ?
         """;
 
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, client.getName());
             stmt.setString(2, client.getEmail());
             stmt.setString(3, client.getPhone());
@@ -126,7 +126,7 @@ public class ClientDAO {
 
     public void delete(Integer id) throws SQLException {
         String sql = "DELETE FROM client WHERE id = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
