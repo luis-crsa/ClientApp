@@ -9,9 +9,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientDAOTest {
 
@@ -53,5 +53,55 @@ public class ClientDAOTest {
 
         assertNotNull(saved);
         assertEquals(client.getName(), saved.getName());
+    }
+
+    @Test
+    public void testFindById() throws SQLException {
+        Client client = new Client(null, "Maria", "maria@example.com", "99999-9999", "123.456.789-00", LocalDate.of(1990, 1, 1), 5000.0, LocalDate.now());
+        dao.insert(client);
+
+        Client saved = dao.findById(client.getId());
+
+        assertNotNull(saved);
+        assertEquals("Maria", saved.getName());
+        assertEquals("maria@example.com", saved.getEmail());
+    }
+
+    @Test
+    public void testFindAll() throws SQLException {
+        Client c1 = new Client(null, "João", "joao@example.com", "123", "111.111.111-11", LocalDate.now(), 2000.0, LocalDate.now());
+        Client c2 = new Client(null, "Ana", "ana@example.com", "456", "222.222.222-22", LocalDate.now(), 3000.0, LocalDate.now());
+
+        dao.insert(c1);
+        dao.insert(c2);
+
+        List<Client> clients = dao.findAll();
+
+        assertEquals(2, clients.size());
+    }
+
+    @Test
+    public void testUpdateClient() throws SQLException {
+        Client client = new Client(null, "Pedro", "pedro@example.com", "111", "333.333.333-33", LocalDate.now(), 4000.0, LocalDate.now());
+        dao.insert(client);
+
+        client.setName("Pedro Silva");
+        client.setEmail("pedro.silva@example.com");
+        dao.update(client);
+
+        Client updated = dao.findById(client.getId());
+        assertEquals("Pedro Silva", updated.getName());
+        assertEquals("pedro.silva@example.com", updated.getEmail());
+    }
+
+    @Test
+    public void testDeleteClient() throws SQLException {
+        Client client = new Client(null, "Carlos", "carlos@example.com", "999", "444.444.444-44", LocalDate.now(), 2500.0, LocalDate.now());
+        dao.insert(client);
+
+        dao.delete(client.getId());
+        Client deleted = dao.findById(client.getId());
+
+        assertNull(deleted);
     }
 }
