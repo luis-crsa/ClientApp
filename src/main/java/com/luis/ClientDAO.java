@@ -33,6 +33,12 @@ public class ClientDAO {
             stmt.setDate(7, java.sql.Date.valueOf(client.getRegistrationDate()));
 
             stmt.executeUpdate();
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    client.setId(generatedKeys.getInt(1));
+                }
+            }
         }
     }
 
