@@ -28,14 +28,9 @@ public class InputHelper {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
-
-            if (input.isBlank()) return null;
-
-            if (isValidEmail(input)) {
-                return input;
-            } else {
-                System.out.println("E-mail inválido. Ex: nome@dominio.com");
-            }
+            
+            if (input.isBlank() || isValidEmail(input)) return input;
+            System.out.println("E-mail inválido. Ex: nome@dominio.com");
         }
     }
 
@@ -43,8 +38,8 @@ public class InputHelper {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
-            if (input.isBlank()) return null;
-            if (isValidPhone(input)) return input;
+            
+            if (input.isBlank() || isValidPhone(input)) return input;
             System.out.println("Telefone inválido. Digite DDD seguido do número (10 ou 11 dígitos). Ex: 11987654321");
         }
     }
